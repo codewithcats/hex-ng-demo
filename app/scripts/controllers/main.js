@@ -4,7 +4,7 @@ angular.module('ngArchitectApp')
   .factory('EventAdapter', function(eventAdapterConfig) {
     var eventListeners,
         destinationToMediumMap,
-        sourceToMediumMap;
+        sourceToMediumMap,
 
     eventListeners = {};
     mapDestinationToMedium(eventAdapterConfig.out);
