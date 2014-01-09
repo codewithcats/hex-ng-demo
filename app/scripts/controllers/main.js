@@ -11,14 +11,18 @@ angular.module('ngArchitectApp')
     mapSourceToMedium(eventAdapterConfig.in);
 
     return {
-      'broadcast': function(source) {
+      'broadcast': function(source, param) {
         var mediumsArray = sourceToMediumMap[source];
+        var listeners = [];
         angular.forEach(mediumsArray, function(m) {
-          var listeners = this.listenersOf(m);
-          angular.forEach(listeners, function(l) {
-            l();
-          });
+          var listenersOfM = this.listenersOf(m);
+          listeners = _.union(listeners, _.compact(listenersOfM));
         }, this);
+
+        var uniqueListeners = _.uniq(listeners);
+        angular.forEach(uniqueListeners, function(l) {
+          l(param);
+        });
       },
       'on': function(destination, listener) {
         var mediumsArray = destinationToMediumMap[destination];

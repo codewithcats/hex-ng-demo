@@ -8,6 +8,7 @@ describe('EventAdapter', function () {
     $provide.value('eventAdapterConfig', {
       'in': {
         'X': ['S1', 'S2'],
+        'Y': ['S2'],
         'Z': ['S1']
       },
       'out': {
@@ -61,6 +62,13 @@ describe('EventAdapter', function () {
       expect(d1).toHaveBeenCalled();
       expect(d2).toHaveBeenCalled();
     });
+
+    it('should call a listener once', function() {
+      var d2_listener = jasmine.createSpy('d2 listener'); 
+      adapter.on('D2', d2_listener);
+      adapter.broadcast('S2');
+      expect(d2_listener.callCount).toBe(1);
+    });
     
     it('should broadcast to different medium', function() {
       var d1 = jasmine.createSpy('d1 listener'); 
@@ -75,6 +83,23 @@ describe('EventAdapter', function () {
       expect(d3).toHaveBeenCalled();
     });
 
+    it('should able to send obj as a param', function() {
+      var d1 = jasmine.createSpy('d1 listener'); 
+      var d2 = jasmine.createSpy('d2 listener'); 
+      var d3 = jasmine.createSpy('d3 listener'); 
+      adapter.on('D1', d1);
+      adapter.on('D2', d2);
+      adapter.on('D3', d3);
+      var expected_param = {
+        test: 'test'
+      };
+      adapter.broadcast('S1', expected_param);
+      expect(d1).toHaveBeenCalledWith(expected_param);
+      expect(d2).toHaveBeenCalledWith(expected_param);
+      expect(d3).toHaveBeenCalledWith(expected_param);
+    });
+
+    it('should ')
 
   });
 
