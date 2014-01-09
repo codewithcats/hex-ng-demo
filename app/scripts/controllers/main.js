@@ -83,6 +83,15 @@ angular.module('ngArchitectApp')
       }
     };
   })
+  .controller('PlanningCtrl', function($scope) {
+    // Use Cases
+    $scope.useCases = {
+      'moveStory': function(src, dest, story) {
+        src.removeStory(story);
+        dest.addStory(story);
+      }
+    };
+  })
   .controller('PreviewCtrl', function($scope, EventAdapter) {
     var ctrl = this;
 
@@ -100,7 +109,7 @@ angular.module('ngArchitectApp')
 
     // Use Case implementations
     ctrl.previewStory = function(story) {
-      console.log(story);
+      $scope.story = story;
     };
   })
   .controller('BacklogCtrl', function($scope, EventAdapter, BacklogItemsService) {
@@ -117,6 +126,14 @@ angular.module('ngArchitectApp')
     ctrl.loadAndDisplayBacklogItems = function() {
       var items = BacklogItemsService.loadBacklogItems();
       $scope.backlogItems = items;
+    };
+
+    ctrl.addStory = function(story) {
+      $scope.backlogItems.push(story);
+    };
+
+    ctrl.removeStory = function(story) {
+      $scope.backlogItems = _.without($scope.backlogItems, story);
     };
 
     // GUI actions
