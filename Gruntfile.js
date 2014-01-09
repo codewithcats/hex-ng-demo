@@ -25,8 +25,23 @@ module.exports = function (grunt) {
       dist: 'dist'
     },
 
+    coffee: {
+      compile: {
+        options: {
+          bare: true
+        },
+        files: {
+          '<%= yeoman.app %>/scripts/js/app.js': ['<%= yeoman.app %>/scripts/coffee/**/*.coffee']
+        }
+      }
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
+      coffee: {
+        files: ['<%= yeoman.app %>/scripts/coffee/**/*.coffee'],
+        tasks: ['coffee:compile']
+      },
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
