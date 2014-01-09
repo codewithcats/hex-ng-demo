@@ -4,12 +4,10 @@
 
 <div class="jumbotron previewer"
     ng-controller="PreviewCtrl">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
+  <h4>Preview</h4>
+  <h1>{{story.title}}</h1>
+  <p class="lead">{{story.content}}</p>
+  <p ng-show="story"><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
 </div>
 
 <div class="row marketing">
@@ -21,7 +19,14 @@
       <h4>{{item.title}}</h4>
       <p>{{item.content}}</p>
     </div>
-    <div class="col-lg-6 backlog">
+  </div>
+  <div class="col-lg-6 backlog" 
+    ng-controller="BacklogCtrl" 
+    ng-init="useCases.displayBacklogItems()">
+    <div ng-repeat="item in backlogItems"
+        ng-click="storyClick(item)">
+      <h4>{{item.title}}</h4>
+      <p>{{item.content}}</p>
     </div>
   </div>
 </div>
