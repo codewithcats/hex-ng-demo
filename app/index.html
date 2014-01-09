@@ -38,6 +38,7 @@
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -45,7 +46,7 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script>
-        angular.module('ngArchitectApp').value('eventAdaptorConfig', {
+        angular.module('ngArchitectApp').value('eventAdapterConfig', {
             'in': {
                 'backlog.story.selected': ['story.clicked', 'story.doubleclicked']
             },
