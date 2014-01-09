@@ -4,7 +4,36 @@ angular.module('ngArchitectApp')
   .factory('EventAdapter', function(eventAdapterConfig) {
     var eventListeners,
         destinationToMediumMap,
-        sourceToMediumMap,
+        sourceToMediumMap;
+
+    function push(key, value, map) {
+      if(!(key in map)) {
+        map[key] = [];
+      }
+      map[key].push(value);
+    }
+
+    function putMedium(key, medium, map) {
+      push(key, medium, map);
+    }
+
+    function mapSourceToMedium(config) {
+      sourceToMediumMap = {};
+      angular.forEach(config, function(sourceArray, medium) {
+        angular.forEach(sourceArray, function(source) {
+          putMedium(source, medium, sourceToMediumMap);
+        });
+      });
+    }
+
+    function mapDestinationToMedium(config) {
+      destinationToMediumMap = {};
+      angular.forEach(config, function(destinationArray, medium) {
+        angular.forEach(destinationArray, function(destination) {
+          putMedium(destination, medium, destinationToMediumMap);
+        });
+      });
+    }
 
     eventListeners = {};
     mapDestinationToMedium(eventAdapterConfig.out);
@@ -35,32 +64,6 @@ angular.module('ngArchitectApp')
       }
     };
 
-    function push(key, value, map) {
-      map[key] || (map[key] = []);
-      map[key].push(value); 
-    }
-
-    function putMedium(key, medium, map) {
-      push(key, medium, map);
-    }
-
-    function mapSourceToMedium(config) {
-      sourceToMediumMap = {};
-      angular.forEach(config, function(sourceArray, medium) {
-        angular.forEach(sourceArray, function(source) {
-          putMedium(source, medium, sourceToMediumMap);
-        });     
-      });
-    };
-
-    function mapDestinationToMedium(config) {
-      destinationToMediumMap = {};
-      angular.forEach(config, function(destinationArray, medium) {
-        angular.forEach(destinationArray, function(destination) {
-          putMedium(destination, medium, destinationToMediumMap);
-        });     
-      });
-    }
   })
   .factory('BacklogItemsService', function () {
     var items = [
@@ -104,7 +107,7 @@ angular.module('ngArchitectApp')
 
     // Use Cases executions
     EventAdapter.on('story.preview', function(story) {
-      $scope.useCases.previewStory(story); 
+      $scope.useCases.previewStory(story);
     });
 
     // Use Case implementations

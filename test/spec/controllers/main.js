@@ -34,29 +34,30 @@ describe('EventAdapter', function () {
       var d1 = function() {};
       adapter.on('D1', d1);
       var list = adapter.listenersOf('X');
-      expect(list).toContain(d1); 
+      expect(list).toContain(d1);
 
       var d2 = function() {};
       adapter.on('D2', d2);
       list = adapter.listenersOf('X');
-      expect(list).toContain(d2); 
-      expect(list).toContain(d1); 
+      expect(list).toContain(d2);
+      expect(list).toContain(d1);
 
       list = adapter.listenersOf('Y');
-      expect(list).toContain(d2); 
+      expect(list).toContain(d2);
     });
   });
 
   describe('function: broadcast', function() {
     it('should call all listeners register for config event', function() {
-      var d1 = jasmine.createSpy('d1 listener'); 
-      var d2 = jasmine.createSpy('d2 listener'); 
+      var d1 = jasmine.createSpy('d1 listener');
+      var d2 = jasmine.createSpy('d2 listener');
       adapter.on('D1', d1);
       adapter.on('D1', d2);
       adapter.broadcast('S1');
       expect(d1).toHaveBeenCalled();
       expect(d2).toHaveBeenCalled();
-      d1.reset();d2.reset();
+      d1.reset();
+      d2.reset();
 
       adapter.broadcast('S2');
       expect(d1).toHaveBeenCalled();
@@ -64,16 +65,16 @@ describe('EventAdapter', function () {
     });
 
     it('should call a listener once', function() {
-      var d2_listener = jasmine.createSpy('d2 listener'); 
-      adapter.on('D2', d2_listener);
+      var d2Listener = jasmine.createSpy('d2 listener');
+      adapter.on('D2', d2Listener);
       adapter.broadcast('S2');
-      expect(d2_listener.callCount).toBe(1);
+      expect(d2Listener.callCount).toBe(1);
     });
     
     it('should broadcast to different medium', function() {
-      var d1 = jasmine.createSpy('d1 listener'); 
-      var d2 = jasmine.createSpy('d2 listener'); 
-      var d3 = jasmine.createSpy('d3 listener'); 
+      var d1 = jasmine.createSpy('d1 listener');
+      var d2 = jasmine.createSpy('d2 listener');
+      var d3 = jasmine.createSpy('d3 listener');
       adapter.on('D1', d1);
       adapter.on('D2', d2);
       adapter.on('D3', d3);
@@ -84,22 +85,20 @@ describe('EventAdapter', function () {
     });
 
     it('should able to send obj as a param', function() {
-      var d1 = jasmine.createSpy('d1 listener'); 
-      var d2 = jasmine.createSpy('d2 listener'); 
-      var d3 = jasmine.createSpy('d3 listener'); 
+      var d1 = jasmine.createSpy('d1 listener');
+      var d2 = jasmine.createSpy('d2 listener');
+      var d3 = jasmine.createSpy('d3 listener');
       adapter.on('D1', d1);
       adapter.on('D2', d2);
       adapter.on('D3', d3);
-      var expected_param = {
+      var expectedParam = {
         test: 'test'
       };
-      adapter.broadcast('S1', expected_param);
-      expect(d1).toHaveBeenCalledWith(expected_param);
-      expect(d2).toHaveBeenCalledWith(expected_param);
-      expect(d3).toHaveBeenCalledWith(expected_param);
+      adapter.broadcast('S1', expectedParam);
+      expect(d1).toHaveBeenCalledWith(expectedParam);
+      expect(d2).toHaveBeenCalledWith(expectedParam);
+      expect(d3).toHaveBeenCalledWith(expectedParam);
     });
-
-    it('should ')
 
   });
 
