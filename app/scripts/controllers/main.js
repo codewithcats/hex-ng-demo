@@ -121,19 +121,18 @@ angular.module('ngArchitectApp')
         ctrl.loadAndDisplayBacklogItems();
       }
     };
-
-    // Use Case implementations
-    ctrl.loadAndDisplayBacklogItems = function() {
-      var items = BacklogItemsService.loadBacklogItems();
-      $scope.backlogItems = items;
-    };
-
     ctrl.addStory = function(story) {
       $scope.backlogItems.push(story);
     };
 
     ctrl.removeStory = function(story) {
       $scope.backlogItems = _.without($scope.backlogItems, story);
+    };
+
+    // Use Case implementations
+    ctrl.loadAndDisplayBacklogItems = function() {
+      var items = BacklogItemsService.loadBacklogItems();
+      $scope.backlogItems = items;
     };
 
     // GUI actions
