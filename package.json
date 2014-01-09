@@ -1,6 +1,7 @@
 {
   "name": "AngularJS Architecture Playground",
   "version": "0.1.0",
+  "description": "Demonstration of AngularJS application architecture.",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
