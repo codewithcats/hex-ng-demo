@@ -133,7 +133,7 @@ angular.module('ngArchitectApp').controller('PreviewCtrl', function($scope, Even
       return ctrl.previewStory(story);
     }
   };
-  EventAdapter.on('story.preview', function(story) {
+  EventAdapter.on('preview.previewStory', function(story) {
     return $scope.useCases.previewStory(story);
   });
   ctrl.previewStory = function(story) {
