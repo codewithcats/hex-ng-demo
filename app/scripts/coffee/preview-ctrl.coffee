@@ -1,16 +1,17 @@
 angular.module('ngArchitectApp')
   .controller('PreviewCtrl', ($scope, EventAdapter) ->
-    ctrl = this;
+    ctrl = this
 
     # Use Cases
     $scope.useCases =
-      'previewStory': (story) -> ctrl.previewStory(story)
+      'previewStory': (story) ->
+        ctrl.previewStory(story)
 
-    # Use Cases executions
-    EventAdapter.on 'story.preview', (story) -> $scope.useCases.previewStory(story)
+    # (Event -> Use Cases) Bindings
+    EventAdapter.on 'preview.previewStory', (story) -> $scope.useCases.previewStory(story)
 
-    # Use Case implementations
-    ctrl.previewStory = (story) -> 
+    # GUI implementations
+    ctrl.previewStory = (story) ->
       $scope.story = story
       return
 

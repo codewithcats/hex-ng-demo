@@ -1,18 +1,19 @@
 angular.module('ngArchitectApp')
   .controller('BacklogCtrl', ($scope, EventAdapter, BacklogItemsService) ->
-    ctrl = this;
+    ctrl = this
 
     # Use Cases
     $scope.useCases =
       'displayBacklogItems': () ->
         ctrl.loadAndDisplayBacklogItems()
 
-    ctrl.addStory = (story) -> $scope.backlogItems.push(story)
-    ctrl.removeStory = (story) -> 
+    ctrl.addStory = (story) -> 
+      $scope.backlogItems.push(story)
+    ctrl.removeStory = (story) ->
       $scope.backlogItems = _.without($scope.backlogItems, story)
       return $scope.backlogItems
 
-    # Use Case implementations
+    # GUI implementations
     ctrl.loadAndDisplayBacklogItems = () ->
       items = BacklogItemsService.loadBacklogItems()
       $scope.backlogItems = items
