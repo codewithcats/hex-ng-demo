@@ -15,9 +15,10 @@ angular.module('ngArchitectApp')
 
     # GUI implementations
     ctrl.loadAndDisplayBacklogItems = () ->
-      items = BacklogItemsService.loadBacklogItems()
-      $scope.backlogItems = items
-      return $scope.backlogItems
+      BacklogItemsService.loadBacklogItems()
+        .success (items)->
+          $scope.backlogItems = items
+          return
 
     # GUI actions
     $scope.storyClick = (story) -> EventAdapter.broadcast('story.clicked', story)
