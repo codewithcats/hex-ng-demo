@@ -17,33 +17,20 @@ angular.module('ngArchitectApp').controller('BacklogCtrl', function($scope, Even
     return $scope.backlogItems;
   };
   ctrl.loadAndDisplayBacklogItems = function() {
-    var items;
-    items = BacklogItemsService.loadBacklogItems();
-    $scope.backlogItems = items;
-    return $scope.backlogItems;
+    return BacklogItemsService.loadBacklogItems().success(function(items) {
+      $scope.backlogItems = items;
+    });
   };
   $scope.storyClick = function(story) {
     return EventAdapter.broadcast('story.clicked', story);
   };
 });
 
-angular.module('ngArchitectApp').factory('BacklogItemsService', function() {
-  var items, service;
-  items = [
-    {
-      'title': 'HTML5 Boilerplate',
-      'content': 'HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.'
-    }, {
-      'title': 'Angular',
-      'content': 'AngularJS is a toolset for building the framework most suited to your application development.'
-    }, {
-      'title': 'Karma',
-      'content': 'Spectacular Test Runner for JavaScript.'
-    }
-  ];
+angular.module('ngArchitectApp').factory('BacklogItemsService', function($http) {
+  var service;
   service = {
     'loadBacklogItems': function() {
-      return items;
+      return $http.get('data/backlog-items.json');
     }
   };
   return service;
