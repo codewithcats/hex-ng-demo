@@ -36,6 +36,33 @@ angular.module('ngArchitectApp').factory('BacklogItemsService', function($http) 
   return service;
 });
 
+angular.module('ngArchitectApp').factory('PreviewStoryContext', function() {
+  var _this = this;
+  this.roles = {
+    'previewer': function(actor) {
+      _this.previewer = actor;
+    }
+  };
+  this.useCases = {
+    'previewStory': function(story) {
+      return _this.previewer.preview(story);
+    }
+  };
+  return this;
+});
+
+angular.module('ngArchitectApp').controller('PreviewStoryCtrl', function(PreviewStoryContext, EventAdapter, $scope) {
+  this.previewer = {
+    preview: function(story) {
+      return $scope.story = story;
+    }
+  };
+  PreviewStoryContext.roles.previewer(this.previewer);
+  EventAdapter.on('previewStory.previewStory', function(story) {
+    return PreviewStoryContext.useCases.previewStory(story);
+  });
+});
+
 angular.module('ngArchitectApp').factory('EventAdapter', function(eventAdapterConfig) {
   var destinationToMediumMap, eventAdapter, eventListeners, mapDestinationToMedium, mapSourceToMedium, push, putMedium, sourceToMediumMap;
   push = function(key, value, map) {
@@ -109,21 +136,5 @@ angular.module('ngArchitectApp').controller('PlanningCtrl', function($scope) {
       src.removeStory(story);
       return dest.addStory(story);
     }
-  };
-});
-
-angular.module('ngArchitectApp').controller('PreviewCtrl', function($scope, EventAdapter) {
-  var ctrl;
-  ctrl = this;
-  $scope.useCases = {
-    'previewStory': function(story) {
-      return ctrl.previewStory(story);
-    }
-  };
-  EventAdapter.on('preview.previewStory', function(story) {
-    return $scope.useCases.previewStory(story);
-  });
-  ctrl.previewStory = function(story) {
-    $scope.story = story;
   };
 });
