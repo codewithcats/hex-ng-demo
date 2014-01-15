@@ -2,8 +2,7 @@ angular.module('ngArchitectApp')
   .controller 'PreviewStoryCtrl', (PreviewStoryContext, EventAdapter, $scope)->
 
     @previewer =
-      preview: (story) ->
-        $scope.story = story
+      preview: (story) -> $scope.story = story
 
     # Role assignments
     PreviewStoryContext.roles.previewer @previewer

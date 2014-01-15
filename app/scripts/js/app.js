@@ -40,7 +40,7 @@ angular.module('ngArchitectApp').factory('PreviewStoryContext', function() {
   var _this = this;
   this.roles = {
     'previewer': function(actor) {
-      _this.previewer = actor;
+      return _this.previewer = actor;
     }
   };
   this.useCases = {
