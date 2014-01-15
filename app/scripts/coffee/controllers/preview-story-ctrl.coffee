@@ -3,6 +3,7 @@ angular.module('ngArchitectApp')
 
     @previewer =
       preview: (story) -> $scope.story = story
+      close: () -> $scope.story = null
 
     # Role assignments
     PreviewStoryContext.roles.previewer @previewer
@@ -11,4 +12,5 @@ angular.module('ngArchitectApp')
     EventAdapter.on 'previewStory.previewStory', (story) ->
       PreviewStoryContext.useCases.previewStory(story)
 
+    $scope.close = () -> PreviewStoryContext.useCases.closeStory()
     return

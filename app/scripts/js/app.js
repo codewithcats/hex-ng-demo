@@ -67,6 +67,9 @@ angular.module('ngArchitectApp').factory('PreviewStoryContext', function() {
   this.useCases = {
     'previewStory': function(story) {
       return _this.previewer.preview(story);
+    },
+    'closeStory': function() {
+      return _this.previewer.close();
     }
   };
   return this;
@@ -107,12 +110,18 @@ angular.module('ngArchitectApp').controller('PreviewStoryCtrl', function(Preview
   this.previewer = {
     preview: function(story) {
       return $scope.story = story;
+    },
+    close: function() {
+      return $scope.story = null;
     }
   };
   PreviewStoryContext.roles.previewer(this.previewer);
   EventAdapter.on('previewStory.previewStory', function(story) {
     return PreviewStoryContext.useCases.previewStory(story);
   });
+  $scope.close = function() {
+    return PreviewStoryContext.useCases.closeStory();
+  };
 });
 
 angular.module('ngArchitectApp').factory('EventAdapter', function(eventAdapterConfig) {

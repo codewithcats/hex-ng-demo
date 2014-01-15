@@ -7,5 +7,6 @@ angular.module('ngArchitectApp')
     # Use Cases
     @useCases =
       'previewStory': (story) => @previewer.preview(story)
+      'closeStory': () => @previewer.close()
 
     return this
