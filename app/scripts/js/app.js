@@ -11,14 +11,29 @@ angular.module('ngArchitectApp').factory('BacklogItemsService', function($http) 
   return service;
 });
 
-angular.module('ngArchitectApp').factory('Backlog', function($http) {
+angular.module('ngArchitectApp').factory('Backlog', function($http, $q) {
   var constructor;
   constructor = function(uri) {
     var _this = this;
     this.uri = uri;
-    return this.get = function(config) {
-      return $http.get(_this.uri, config);
+    this.load = function(config) {
+      var deferred;
+      deferred = $q.defer();
+      $http.get(uri, config).success(function(items) {
+        _this.items = items;
+        return deferred.resolve(_this.items);
+      }).error(function() {
+        return deferred.reject();
+      });
+      return deferred.promise;
     };
+    this.removeStory = function(story) {
+      return _this.items = _.without(_this.items, story);
+    };
+    this.insertStory = function(story) {
+      return _this.items.push(story);
+    };
+    return this;
   };
   return constructor;
 });
@@ -27,6 +42,16 @@ angular.module('ngArchitectApp').factory('BacklogContext', function() {
   this.useCases = {
     'displayBacklogItems': function(backlog) {
       return backlog.displayItems();
+    }
+  };
+  return this;
+});
+
+angular.module('ngArchitectApp').factory('PlanningContext', function() {
+  this.useCases = {
+    'moveStory': function(src, dest, story) {
+      src.removeStory(story);
+      return dest.insertStory(story);
     }
   };
   return this;
@@ -58,6 +83,23 @@ angular.module('ngArchitectApp').controller('BacklogCtrl', function(BacklogConte
   BacklogContext.useCases.displayBacklogItems(this.backlog);
   $scope.storyClick = function(story) {
     return EventAdapter.broadcast('story.clicked', story);
+  };
+});
+
+angular.module('ngArchitectApp').controller('PlanningCtrl', function(PlanningContext, Backlog, EventAdapter, $scope) {
+  var _this = this;
+  $scope.leftBacklog = new Backlog('data/backlog-items.json');
+  $scope.rightBacklog = new Backlog('data/backlog-items.json');
+  $scope.leftBacklog.load();
+  $scope.rightBacklog.load();
+  $scope.storyClick = function(story) {
+    return EventAdapter.broadcast('story.clicked', story);
+  };
+  $scope.moveStoryToRightBacklog = function(story) {
+    return PlanningContext.useCases.moveStory($scope.leftBacklog, $scope.rightBacklog, story);
+  };
+  $scope.moveStoryToLeftBacklog = function(story) {
+    return PlanningContext.useCases.moveStory($scope.rightBacklog, $scope.leftBacklog, story);
   };
 });
 
@@ -138,13 +180,4 @@ angular.module('ngArchitectApp').factory('EventAdapter', function(eventAdapterCo
     }
   };
   return eventAdapter;
-});
-
-angular.module('ngArchitectApp').controller('PlanningCtrl', function($scope) {
-  $scope.useCases = {
-    'moveStory': function(src, dest, story) {
-      src.removeStory(story);
-      return dest.addStory(story);
-    }
-  };
 });

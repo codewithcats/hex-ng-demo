@@ -1,5 +1,5 @@
 <div class="header">
-  <h3 class="text-muted">AngularJS Architecture Playground</h3>
+  <h3 class="text-muted">Eidos</h3>
 </div>
 
 <div class="jumbotron previewer"
@@ -7,28 +7,30 @@
   <h4>Preview</h4>
   <h1>{{story.title}}</h1>
   <p class="lead">{{story.content}}</p>
-  <p ng-show="story"><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
+  <p ng-show="story"><a class="btn btn-lg" ng-href="#">close</a></p>
 </div>
 
-<div class="row marketing">
-  <div class="col-lg-6 backlog" 
-    ng-controller="BacklogCtrl">
-    <div ng-repeat="item in backlogItems"
+<div class="row marketing" ng-controller="PlanningCtrl">
+  <div class="col-lg-6 backlog">
+    <h3>Left Backlog</h3>
+    <div ng-repeat="item in leftBacklog.items"
         ng-click="storyClick(item)">
       <h4>{{item.title}}</h4>
       <p>{{item.content}}</p>
+      <a ng-click="moveStoryToRightBacklog(item)">move to right</a>
     </div>
   </div>
-  <div class="col-lg-6 backlog" 
-    ng-controller="BacklogCtrl">
-    <div ng-repeat="item in backlogItems"
+  <div class="col-lg-6 backlog">
+    <h3>Right Backlog</h3>
+    <div ng-repeat="item in rightBacklog.items"
         ng-click="storyClick(item)">
       <h4>{{item.title}}</h4>
       <p>{{item.content}}</p>
+      <a ng-click="moveStoryToLeftBacklog(item)">move to left</a>
     </div>
   </div>
 </div>
 
 <div class="footer">
-  <p>♥ from the Yeoman team</p>
+  <p>♥ from the Eidos team</p>
 </div>
