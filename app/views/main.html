@@ -12,8 +12,7 @@
 
 <div class="row marketing">
   <div class="col-lg-6 backlog" 
-    ng-controller="BacklogCtrl" 
-    ng-init="useCases.displayBacklogItems()">
+    ng-controller="BacklogCtrl">
     <div ng-repeat="item in backlogItems"
         ng-click="storyClick(item)">
       <h4>{{item.title}}</h4>
@@ -21,8 +20,7 @@
     </div>
   </div>
   <div class="col-lg-6 backlog" 
-    ng-controller="BacklogCtrl" 
-    ng-init="useCases.displayBacklogItems()">
+    ng-controller="BacklogCtrl">
     <div ng-repeat="item in backlogItems"
         ng-click="storyClick(item)">
       <h4>{{item.title}}</h4>

@@ -1,31 +1,6 @@
 'use strict';
 angular.module('ngArchitectApp', []);
 
-angular.module('ngArchitectApp').controller('BacklogCtrl', function($scope, EventAdapter, BacklogItemsService) {
-  var ctrl;
-  ctrl = this;
-  $scope.useCases = {
-    'displayBacklogItems': function() {
-      return ctrl.loadAndDisplayBacklogItems();
-    }
-  };
-  ctrl.addStory = function(story) {
-    return $scope.backlogItems.push(story);
-  };
-  ctrl.removeStory = function(story) {
-    $scope.backlogItems = _.without($scope.backlogItems, story);
-    return $scope.backlogItems;
-  };
-  ctrl.loadAndDisplayBacklogItems = function() {
-    return BacklogItemsService.loadBacklogItems().success(function(items) {
-      $scope.backlogItems = items;
-    });
-  };
-  $scope.storyClick = function(story) {
-    return EventAdapter.broadcast('story.clicked', story);
-  };
-});
-
 angular.module('ngArchitectApp').factory('BacklogItemsService', function($http) {
   var service;
   service = {
@@ -34,6 +9,27 @@ angular.module('ngArchitectApp').factory('BacklogItemsService', function($http) 
     }
   };
   return service;
+});
+
+angular.module('ngArchitectApp').factory('Backlog', function($http) {
+  var constructor;
+  constructor = function(uri) {
+    var _this = this;
+    this.uri = uri;
+    return this.get = function(config) {
+      return $http.get(_this.uri, config);
+    };
+  };
+  return constructor;
+});
+
+angular.module('ngArchitectApp').factory('BacklogContext', function() {
+  this.useCases = {
+    'displayBacklogItems': function(backlog) {
+      return backlog.displayItems();
+    }
+  };
+  return this;
 });
 
 angular.module('ngArchitectApp').factory('PreviewStoryContext', function() {
@@ -49,6 +45,20 @@ angular.module('ngArchitectApp').factory('PreviewStoryContext', function() {
     }
   };
   return this;
+});
+
+angular.module('ngArchitectApp').controller('BacklogCtrl', function(BacklogContext, BacklogItemsService, EventAdapter, $scope, $http) {
+  this.backlog = {
+    displayItems: function() {
+      return BacklogItemsService.loadBacklogItems().success(function(items) {
+        return $scope.backlogItems = items;
+      });
+    }
+  };
+  BacklogContext.useCases.displayBacklogItems(this.backlog);
+  $scope.storyClick = function(story) {
+    return EventAdapter.broadcast('story.clicked', story);
+  };
 });
 
 angular.module('ngArchitectApp').controller('PreviewStoryCtrl', function(PreviewStoryContext, EventAdapter, $scope) {
