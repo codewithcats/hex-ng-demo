@@ -59,17 +59,12 @@ angular.module('ngArchitectApp').factory('PlanningContext', function() {
 
 angular.module('ngArchitectApp').factory('PreviewStoryContext', function() {
   var _this = this;
-  this.roles = {
-    'previewer': function(actor) {
-      return _this.previewer = actor;
-    }
-  };
   this.useCases = {
-    'previewStory': function(story) {
-      return _this.previewer.preview(story);
+    'previewStory': function(previewer, story) {
+      return previewer.preview(story);
     },
-    'closeStory': function() {
-      return _this.previewer.close();
+    'closeStory': function(previewer) {
+      return previewer.close();
     }
   };
   return this;
@@ -107,6 +102,7 @@ angular.module('ngArchitectApp').controller('PlanningCtrl', function(PlanningCon
 });
 
 angular.module('ngArchitectApp').controller('PreviewStoryCtrl', function(PreviewStoryContext, EventAdapter, $scope) {
+  var _this = this;
   this.previewer = {
     preview: function(story) {
       return $scope.story = story;
@@ -115,12 +111,11 @@ angular.module('ngArchitectApp').controller('PreviewStoryCtrl', function(Preview
       return $scope.story = null;
     }
   };
-  PreviewStoryContext.roles.previewer(this.previewer);
   EventAdapter.on('previewStory.previewStory', function(story) {
-    return PreviewStoryContext.useCases.previewStory(story);
+    return PreviewStoryContext.useCases.previewStory(_this.previewer, story);
   });
   $scope.close = function() {
-    return PreviewStoryContext.useCases.closeStory();
+    return PreviewStoryContext.useCases.closeStory(_this.previewer);
   };
 });
 
